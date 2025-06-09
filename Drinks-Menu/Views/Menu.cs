@@ -5,7 +5,7 @@ namespace Drinks_Menu.Views;
 
 public class Menu
 {
-    internal static void MainMenu()
+    internal async Task MainMenu()
     {
         var isMenuRunning = true;
         while (isMenuRunning)
@@ -23,7 +23,7 @@ public class Menu
                 case "Get All Drinks By Category":
                     AnsiConsole.Clear();
                     var client = new HttpClient();
-                    DrinksController.GetAllDrinksByCategory(client);
+                    await DrinksController.GetAllDrinksByCategory(client);
                     break;
                 case "2":
                     AnsiConsole.Clear();
