@@ -1,22 +1,39 @@
 ﻿using Drinks_Menu.Controllers;
-using Drinks_Menu.Models;
 using Spectre.Console;
 
 namespace Drinks_Menu.Views;
 
 public class UserInterface
 {
-    internal static async Task ShowCategories(List<Category> categories)
+    internal static async Task<string> ChooseCategory()
     {
-        var table = new Table();
-        table.Title(new TableTitle("Drinks"));
-        table.AddColumn(new TableColumn("Category"));
+        var categories = await DrinksController.GetAllCategories(DrinksController._client);
 
-        foreach (var category in categories)
+        var categoryArray = categories.Select(c => c.strCategory).ToArray();
+
+        var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("Please select a drink category:")
+            .AddChoices(categoryArray));
+
+        var categoryOption = categories.FirstOrDefault(c => c.strCategory == option);
+
+        return categoryOption.strCategory;
+    }
+
+    internal static async Task ViewDrinksByCategory()
+    {
+        var category = await ChooseCategory();
+        
+        var drinks = await DrinksController.GetDrinksByCategory(category);
+
+        var table = new Table()
+            .AddColumn($"{category} Drinks");
+        
+        foreach (var drink in drinks)
         {
-            table.AddRow(category.strCategory);
+            table.AddRow(drink.strDrink);
         }
-
+        
         AnsiConsole.Write(table);
     }
 }
