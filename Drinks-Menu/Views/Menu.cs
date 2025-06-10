@@ -14,16 +14,16 @@ public class Menu
                 new SelectionPrompt<string>()
                     .Title("What would you like to do?")
                     .AddChoices(
-                        "Get All Drinks By Category",
+                        "View Drink Categories",
                         "2",
                         "3",
                         "Quit"));
             switch (userChoice)
             {
-                case "Get All Drinks By Category":
+                case "View Drink Categories":
                     AnsiConsole.Clear();
-                    var client = new HttpClient();
-                    await DrinksController.GetAllDrinksByCategory(client);
+                    var client = DrinksController._client;
+                    await DrinksController.GetAllCategories(client);
                     break;
                 case "2":
                     AnsiConsole.Clear();
