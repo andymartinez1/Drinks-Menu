@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using Drinks_Menu.Controllers;
-using Drinks_Menu.Models;
+﻿using Drinks_Menu.Controllers;
 using Spectre.Console;
 
 namespace Drinks_Menu.Views;
@@ -34,24 +32,45 @@ public class UserInterface
             .Title("Please select a drink:")
             .AddChoices(drinksArray));
 
-        return option;
+        var drinkOption = drinks.FirstOrDefault(d => d.strDrink == option).idDrink;
+
+        return drinkOption;
     }
 
     internal static async Task ChooseDrinkByName()
     {
-        var drinkByCategory = await ChooseDrinkByCategory();
+        var drinkId = await ChooseDrinkByCategory();
 
-        var drink = await DrinksController.GetDrinksByName(drinkByCategory);
-        
-        var properties = drink.GetType().GetProperties();
-        
-        var values = properties.ToDictionary(p => p.Name, 
-            p => p.GetValue(drink) as string ?? "no data found");
+        var drink = await DrinksController.GetDrinkDetails(drinkId);
 
-        foreach (var property in values)
+        var ingredientList = new List<string>();
+
+        for (var i = 1; i <= 15; i++)
         {
-            if(property.Value.Equals("no data found")) continue;
-            AnsiConsole.MarkupLine("[green]{0}[/]: [yellow]{1}[/]", property.Key, property.Value);
+            var ingredient = drink.FirstOrDefault(d => d.idDrink == drinkId)
+                .GetType().GetProperty($"strIngredient{i}")
+                ?.GetValue(drink.FirstOrDefault(d => d.idDrink == drinkId), null);
+
+            if (ingredient != null && !string.IsNullOrEmpty(ingredient.ToString()))
+                ingredientList.Add(ingredient.ToString());
         }
+
+        var ingredients = string.Join(", ", ingredientList);
+
+        var table = new Table()
+            .AddColumn("Drink Name")
+            .AddColumn("Alcoholic")
+            .AddColumn("Glass Type")
+            .AddColumn("Instructions")
+            .AddColumn("Ingredients");
+        table.AddRow(
+            drink.FirstOrDefault(d => d.idDrink == drinkId).strDrink,
+            drink.FirstOrDefault(d => d.idDrink == drinkId).strAlcoholic,
+            drink.FirstOrDefault(d => d.idDrink == drinkId).strGlass,
+            drink.FirstOrDefault(d => d.idDrink == drinkId).strInstructions,
+            ingredients
+        );
+
+        AnsiConsole.Write(table);
     }
 }

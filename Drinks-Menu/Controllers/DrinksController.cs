@@ -15,7 +15,7 @@ public class DrinksController
     {
         try
         {
-            using HttpResponseMessage response = await client.GetAsync("list.php?c=list");
+            using var response = await client.GetAsync("list.php?c=list");
 
             response.EnsureSuccessStatusCode();
 
@@ -23,7 +23,7 @@ public class DrinksController
 
             var deserializedJsonResponse = JsonConvert.DeserializeObject<Categories>(jsonResponse);
 
-            List<Category> categories = deserializedJsonResponse.CategoriesList;
+            var categories = deserializedJsonResponse.CategoriesList;
 
             return categories;
         }
@@ -38,7 +38,7 @@ public class DrinksController
     {
         try
         {
-            using HttpResponseMessage response = await _client.GetAsync($"filter.php?c={category}");
+            using var response = await _client.GetAsync($"filter.php?c={category}");
 
             response.EnsureSuccessStatusCode();
 
@@ -46,7 +46,7 @@ public class DrinksController
 
             var deserializedJsonResponse = JsonConvert.DeserializeObject<Drinks>(jsonResponse);
 
-            List<Drink> drinks = deserializedJsonResponse.DrinksList;
+            var drinks = deserializedJsonResponse.DrinksList;
 
             return drinks;
         }
@@ -57,18 +57,26 @@ public class DrinksController
         }
     }
 
-    internal static async Task<List<DrinkDetail>> GetDrinksByName(string name)
+    internal static async Task<List<DrinkDetail>> GetDrinkDetails(string id)
     {
-        using HttpResponseMessage response = await _client.GetAsync($"filter.php?s={name}");
+        try
+        {
+            using var response = await _client.GetAsync($"lookup.php?i={id}");
 
-        response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
 
-        var jsonResponse = await response.Content.ReadAsStringAsync();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
 
-        var deserializedJsonResponse = JsonConvert.DeserializeObject<DrinkDetails>(jsonResponse);
+            var deserializedJsonResponse = JsonConvert.DeserializeObject<DrinkDetails>(jsonResponse);
 
-        List<DrinkDetail> drink = deserializedJsonResponse.DrinkDetailList;
+            var drink = deserializedJsonResponse.DrinkDetailList;
 
-        return drink;
+            return drink;
+        }
+        catch (Exception e)
+        {
+            AnsiConsole.WriteLine(e.Message);
+            throw;
+        }
     }
 }

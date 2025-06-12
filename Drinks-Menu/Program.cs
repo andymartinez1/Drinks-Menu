@@ -1,5 +1,5 @@
 ﻿using Drinks_Menu.Views;
 
-Menu menu = new Menu();
+var menu = new Menu();
 
 await menu.MainMenu();
