@@ -9,15 +9,15 @@ public class UserInterface
     {
         var categories = await DrinksController.GetAllCategories(DrinksController._client);
 
-        var categoryArray = categories.Select(c => c.strCategory).ToArray();
+        var categoryArray = categories.Select(c => c.DrinkCategory).ToArray();
 
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
             .Title("Please select a drink category:")
             .AddChoices(categoryArray));
 
-        var categoryOption = categories.FirstOrDefault(c => c.strCategory == option);
+        var categoryOption = categories.FirstOrDefault(c => c.DrinkCategory == option);
 
-        return categoryOption.strCategory;
+        return categoryOption.DrinkCategory;
     }
 
     internal static async Task<string> ChooseDrinkByCategory()
@@ -26,13 +26,13 @@ public class UserInterface
 
         var drinks = await DrinksController.GetDrinksByCategory(category);
 
-        var drinksArray = drinks.Select(d => d.strDrink).ToArray();
+        var drinksArray = drinks.Select(d => d.DrinkName).ToArray();
 
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
             .Title("Please select a drink:")
             .AddChoices(drinksArray));
 
-        var drinkOption = drinks.FirstOrDefault(d => d.strDrink == option).idDrink;
+        var drinkOption = drinks.FirstOrDefault(d => d.DrinkName == option).DrinkId;
 
         return drinkOption;
     }
@@ -47,9 +47,9 @@ public class UserInterface
 
         for (var i = 1; i <= 15; i++)
         {
-            var ingredient = drink.FirstOrDefault(d => d.idDrink == drinkId)
-                .GetType().GetProperty($"strIngredient{i}")
-                ?.GetValue(drink.FirstOrDefault(d => d.idDrink == drinkId), null);
+            var ingredient = drink.FirstOrDefault(d => d.DrinkId == drinkId)
+                .GetType().GetProperty($"Ingredient{i}")
+                ?.GetValue(drink.FirstOrDefault(d => d.DrinkId == drinkId), null);
 
             if (ingredient != null && !string.IsNullOrEmpty(ingredient.ToString()))
                 ingredientList.Add(ingredient.ToString());
@@ -64,10 +64,10 @@ public class UserInterface
             .AddColumn("Instructions")
             .AddColumn("Ingredients");
         table.AddRow(
-            drink.FirstOrDefault(d => d.idDrink == drinkId).strDrink,
-            drink.FirstOrDefault(d => d.idDrink == drinkId).strAlcoholic,
-            drink.FirstOrDefault(d => d.idDrink == drinkId).strGlass,
-            drink.FirstOrDefault(d => d.idDrink == drinkId).strInstructions,
+            drink.FirstOrDefault(d => d.DrinkId == drinkId).DrinkName,
+            drink.FirstOrDefault(d => d.DrinkId == drinkId).Alcoholic,
+            drink.FirstOrDefault(d => d.DrinkId == drinkId).Glass,
+            drink.FirstOrDefault(d => d.DrinkId == drinkId).Instructions,
             ingredients
         );
 

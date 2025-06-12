@@ -4,7 +4,8 @@ namespace Drinks_Menu.Models;
 
 public class Category
 {
-    public string strCategory { get; set; }
+    [JsonProperty("strCategory")]
+    public string DrinkCategory { get; set; }
 }
 
 public class Categories

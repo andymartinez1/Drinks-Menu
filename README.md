@@ -1,17 +1,20 @@
-## Drinks Menu Console App
+# Drinks Menu Console App
 
-A simple C# console application that displays a drinks menu, allows users to select drinks, and shows the total order.
+A simple C# console application that displays a drinks menu and shows the drink details.
+
 ![Drink-Menu.png](Drinks-Menu/docs/images/Drink-Menu.png)
 
-### Features
+## Features
 
 - View a list of available drinks by category
 - Select category and see the drinks available for that category
 - View drink detailed information
+
 ![Drink-Categories.png](Drinks-Menu/docs/images/Drink-Categories.png)
+
 ![Drink-Info.png](Drinks-Menu/docs/images/Drink-Info.png)
 
-### Getting Started
+## Getting Started
 
 1. Clone the repository:
    ```bash
@@ -26,14 +29,13 @@ A simple C# console application that displays a drinks menu, allows users to sel
    dotnet run
    ```
 
-### Usage
+## Usage
 
 Follow the on-screen prompts to select drinks and view the details.
 
-### Requirements
+## Requirements
 
 - .NET 9.0 or later
-
 
 ## Technologies used
 
