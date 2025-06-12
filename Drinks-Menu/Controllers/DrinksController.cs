@@ -24,7 +24,7 @@ public class DrinksController
             var deserializedJsonResponse = JsonConvert.DeserializeObject<Categories>(jsonResponse);
 
             List<Category> categories = deserializedJsonResponse.CategoriesList;
-            
+
             return categories;
         }
         catch (Exception e)
@@ -33,7 +33,7 @@ public class DrinksController
             throw;
         }
     }
-    
+
     internal static async Task<List<Drink>> GetDrinksByCategory(string category)
     {
         try
@@ -55,5 +55,20 @@ public class DrinksController
             AnsiConsole.WriteLine(e.Message);
             throw;
         }
+    }
+
+    internal static async Task<List<DrinkDetail>> GetDrinksByName(string name)
+    {
+        using HttpResponseMessage response = await _client.GetAsync($"filter.php?s={name}");
+
+        response.EnsureSuccessStatusCode();
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+
+        var deserializedJsonResponse = JsonConvert.DeserializeObject<DrinkDetails>(jsonResponse);
+
+        List<DrinkDetail> drink = deserializedJsonResponse.DrinkDetailList;
+
+        return drink;
     }
 }

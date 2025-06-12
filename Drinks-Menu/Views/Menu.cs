@@ -11,7 +11,7 @@ public class Menu
         while (IsRunning)
         {
             AnsiConsole.Write(new FigletText("Drinks"));
-            await UserInterface.ViewDrinksByCategory();
+            await UserInterface.ChooseDrinkByName();
         }
         AnsiConsole.WriteLine("Thank you for using the Drinks Menu!");
     }
